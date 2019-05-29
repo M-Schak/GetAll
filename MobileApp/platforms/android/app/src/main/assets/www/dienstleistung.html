@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+
+<body>
+      <img src="img/Interface_Prototyp_3.jpeg" alt="" usemap="#Map" />
+      <map name="Map" id="Map">
+          <area alt="Digitaler Entwurf" title="Digitaler Entwurf" onclick="app.togglePrototype(0)" shape="poly" coords="494,30,566,32,569,65,489,70" />
+          <area alt="Friseur" title="Friseur" onclick="app.goToFriseur()" shape="poly" coords="434,232,480,162,552,168,590,229,547,301,472,296" />
+          <area alt="Menu" title="Menu" onclick="app.goToMenu()" shape="poly" coords="828,306,865,240,939,234,979,302,942,369,866,373" />
+          <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="42,573,67,554,176,557,197,580,181,604,61,603" />
+      </map>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>

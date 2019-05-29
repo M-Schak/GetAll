@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+  <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+
+  <link rel="stylesheet" type="text/css" href="css/index.css" />
+  <title>GetAll - Haussteuerung</title>
+</head>
+
+<body>
+  <img src="img/Interface_Prototyp_8.jpeg" alt="" usemap="#Map" />
+  <map name="Map" id="Map">
+    <area alt="Heizung" title="Heizung" onclick="app.goToHeizung()" shape="poly" coords="175,218,214,153,285,154,324,215,285,286,205,283" />
+    <area alt="Licht" title="Licht" onclick="app.goToLicht()" shape="poly" coords="306,301,343,233,425,234,458,302,425,367,345,366" />
+    <area alt="Menu" title="Menu" onclick="app.goToMenu()" shape="poly" coords="831,305,873,239,948,241,991,310,941,379,867,374" />
+    <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="41,563,58,540,178,538,197,563,175,586,59,586" />
+  </map>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>

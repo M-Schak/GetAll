@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+  <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+
+  <link rel="stylesheet" type="text/css" href="css/index.css" />
+  <title>GetAll - Heizungssteuerung</title>
+</head>
+
+<body>
+  <div class="prototyp">
+    <img src="img/Interface_Prototyp_11b.jpeg" id="fenster_wozi" alt="" usemap="#Map" />
+    <map name="Map" id="Map">
+      <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="40,568,63,545,173,545,196,567,172,594,56,594" />
+    </map>
+    <div id="room_name">Loading...</div>
+    <div class="temp">
+      <div id="istTemp">&deg;C</div>
+      <div id="sollTemp">&deg;C</div>
+    </div>
+    <div class="setTemp">
+      <a onclick="app.changeTemp(-1)" class="pm">-&ensp;</a>
+      <input type="range" min="15" max="25" value="17" class="range" id="tempRange" step="0.5">
+      <a onclick="app.changeTemp(1)" class="pm">&ensp;+</a>
+    </div>
+    <div id="windows">Loading..</div>
+  </div>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript">
+    app.loadHeater();
+
+    // Setze den Callback für den Temperaturregler
+    var tempSlider = document.getElementById("tempRange");
+    tempSlider.oninput = function () {
+      app.setSollTemp(this.value);
+    }
+  </script>
+</body>
+
+</html>

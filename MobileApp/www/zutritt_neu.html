@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+  <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+  <link rel="stylesheet" type="text/css" href="css/index.css" />
+  <title>GetAll - Zutrittssteuerung</title>
+</head>
+
+<body>
+  <div class="prototyp">
+    <img src="img/Interface_Prototyp_15.jpeg" alt="" usemap="#Map" />
+    <map name="Map" id="Map">
+      <area alt="Weiter" title="Weiter" onclick="app.goToZutrittConfirm()" shape="poly" coords="814,578,843,545,954,548,978,577,942,603,837,608" />
+      <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="48,580,68,557,178,557,202,579,179,604,66,605" />
+    </map>
+    <div class="form_zutritt">
+      <form onsubmit="app.goToZutrittConfirm(); return false">
+        <input type="text" name="name" id="name" value="Max Mustermann"><br>
+        <div id="zugangtop">
+        <select name="zugang" id="zugang">
+          <option selected value="PIN">PIN</option>
+          <option value="a">Armband</option>
+          <option value="c">Karte</option>
+          <option value="k">Anhänger</option>
+        </select><nobr></nobr><input type="text" name="code" id="code" value="1234"><br></div>
+        <input type="date" name="ab" id="ab" value="2019-03-01"><br>
+        <input type="date" name="bis" id="bis" value="2019-03-14"><br>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>

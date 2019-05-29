@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+
+<body>
+  <div class="prototyp">
+      <img src="img/Interface_Prototyp_9_4.jpeg" alt="00" id="licht_wozi" usemap="#Map" />
+      <map name="Map" id="Map">
+        <area alt="Leselampe_Status" title="Status Leselampe" onclick="app.toggle_leselampe()" shape="poly" coords="624,185,646,158,679,158,696,188,676,216,635,215" />
+        <area alt="Tischlampe_Status" title="Status Tischlampe" onclick="app.toggle_tischlampe()" shape="poly" coords="621,266,642,236,676,238,692,269,670,292,631,289" />
+        <area alt="Leselampe_Farbe" title="Farbe Leselampe" onclick="app.pickColor(0)" shape="poly" coords="892,183,909,162,989,162,1006,187,989,212,909,215" />
+        <area alt="Tischlampe_Farbe" title="Farbe Tischlampe" onclick="app.pickColor(1)" shape="poly" coords="894,265,916,242,989,239,1010,266,986,297,911,295" />
+        <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="36,564,61,540,171,544,198,563,173,588,53,586" />
+      </map>
+      <div class="slider">
+        <input type="range" min="1" max="100" value="50" class="range" id="leseRange"><br>
+        <input type="range" min="1" max="100" value="50" class="range" id="tischRange">
+      </div>
+    </div>
+    <input type="color" id="colorpicker" style="display:none"/><input type="color" id="colorpicker2" style="display:none"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+        app.pollLight1Status();
+        app.pollLight2Status();
+
+        var tischSlider = document.getElementById("tischRange");
+        var leseSlider = document.getElementById("leseRange");
+
+        tischSlider.oninput = function () {
+          app.setLightDimmer(1, this.value);
+          alert("Tisch: " + this.value);
+        }
+        leseSlider.oninput = function () {
+          app.setLightDimmer(0, this.value);
+          alert("Lese: " + this.value);
+        }
+    </script>
+</body>
+
+</html>

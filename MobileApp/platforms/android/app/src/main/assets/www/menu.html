@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+
+<body>
+      <img src="img/Interface_Prototyp_1.jpg" alt="" usemap="#Map" />
+      <map name="Map" id="Map">
+          <area alt="Dienstleistung" title="Dienstleistung" onclick="app.goToDL()" shape="poly" coords="175,230,212,163,291,164,328,231,289,295,211,297" />
+          <area alt="Sicherheit" title="Sicherheit" onclick="app.goToSicherheit()" shape="poly" coords="173,388,212,323,290,320,327,387,290,454,210,452" />
+          <area alt="Haussteuerung" title="Haussteuerung" onclick="app.goToHaus()" shape="poly" coords="435,232,475,161,551,162,589,225,548,294,470,292" />
+          <area alt="Favoriten" title="Favoriten" onclick="app.goToFavorites()" shape="poly" coords="828,306,869,243,939,240,982,310,940,377,866,376" />
+          <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="42,574,60,552,182,554,199,574,174,597,57,601" />
+      </map>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>

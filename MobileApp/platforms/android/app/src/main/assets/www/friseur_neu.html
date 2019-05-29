@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+
+<body>
+    <div class="prototyp">
+      <img src="img/Interface_Prototyp_5.jpeg" class="proto" alt="" usemap="#Map" />
+      <map name="Map" id="Map">
+        <area alt="Weiter" title="Weiter" onclick="app.goToFriseurConfirm()" shape="poly" coords="829,580,852,551,963,550,988,575,964,601,850,604" />
+        <area alt="Zurueck" title="Zurueck" onclick="app.goBack()" shape="poly" coords="40,572,65,548,177,550,197,573,175,603,60,600" />
+      </map>
+      <div class="form_friseur">
+        <form>
+          <input type="date" name="date" id="date"><br>
+          <input type="time" name="time" id="time" min="8" max="21"><br>
+          <input type="time" name="duration" id="duration"><br>
+          <input type="text" name="repetition" id="repetition"><br>
+          <input type="text" name="comment" id="comment"><br>
+        </form>
+      </div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>
