@@ -1,7 +1,7 @@
 # GetAll Backend und App
-Hierbei handelt es sich um ein Projekt, das im Rahmen des [**Regionalen Innovationszentrums für Gesundheit und Lebensqualität Fulda**](http://hs-fulda.de/rigl-fulda) im Umsetzungsprojekt *Gesundheitstechnik für die Alltagsbewältigung* entstanden ist. 
+Hierbei handelt es sich um ein Projekt, das im Rahmen des [**Regionalen Innovationszentrums für Gesundheit und Lebensqualität Fulda**](http://hs-fulda.de/rigl-fulda) im Umsetzungsprojekt [*Gesundheitstechnik für die Alltagsbewältigung*](https://www.hs-fulda.de/forschen/wissens-und-technologietransfer/rigl-fulda/getall/) entstanden ist. 
 
-Unser Ziel ist ein innovatives Baukastensystem, das sämtliche Assistenzsysteme und SmartHome-Produkte einer Wohnung integriert und mit (regionalen) haushaltsnahen Dienstleistungen verknüpft.
+Unser Ziel ist ein innovatives Baukastensystem, das sämtliche Assistenzsysteme und Smart Home-Produkte einer Wohnung integriert und mit (regionalen) haushaltsnahen Dienstleistungen verknüpft.
 
 ## Architektur
 #### openHAB
@@ -14,7 +14,7 @@ Eine [CouchDB-Datenbank](http://couchdb.apache.org/) speichert Informationen üb
 Das Backend ist ein [Node.JS-Webserver](https://nodejs.org/en/), der als Verbindung zwischen der mobilen Anwendung, openHAB und der Datenbank dient. Es wird eine REST-API angeboten, über die mobile Anwendungen auf die bereitgestellten Daten zugreifen und diese manipulieren können. 
 
 #### Mobile Anwendung
-Eine [Phonegap](https://phonegap.com/)-Anwendung bietet die Möglichkeit für Benutzer, auf all ihre Geräte zuzugreifen. Diese Anwendung ist aktuell als erster Entwurf in Form eines Prototyps umgesetzt. Viele Seiten sind Zeichnungen mit Verlinkungen und nur teilweise dynamischen Inhalten. 
+Eine [PhoneGap](https://phonegap.com/)-Anwendung bietet die Möglichkeit für Benutzer, auf all ihre Geräte zuzugreifen. Diese Anwendung ist aktuell als erster Entwurf in Form eines Prototypen umgesetzt. Viele Seiten sind Zeichnungen mit Verlinkungen und nur teilweise dynamischen Inhalten. 
 
 ## Anleitung
 Der Node.JS-Webserver kann nach der Installation von Node.JS und npm mit folgendem Befehl gestartet werden: 
@@ -27,10 +27,10 @@ node server.js
 
 In der Datei `Backend/api/controllers/House.js` muss dafür die Konstante `host` durch die eigene Adresse zur CouchDB-Instanz ersetzt werden. 
 
-Die Mobile Anwendung kann entweder im Browser betrachtet/verwendet werden (hierzu die Datei `MobileApp/www/index.html` im Browser aufrufen) oder mit Hilfe von Phonegap bzw. [PhoneGap Build](https://build.phonegap.com/) in mobile Apps für iOs, Android und Windows Phone überführt werden. In der Datei `MobileApp/www/js/index.js` muss dafür in der Funktion `getBaseAdress()` die Adresse des Webservers eingetragen werden. 
+Die Mobile Anwendung kann entweder im Browser betrachtet/verwendet werden (hierzu die Datei `MobileApp/www/index.html` im Browser aufrufen) oder mit Hilfe von PhoneGap bzw. [PhoneGap Build](https://build.phonegap.com/) in mobile Apps für iOs, Android und Windows Phone überführt werden. In der Datei `MobileApp/www/js/index.js` muss dafür in der Funktion `getBaseAdress()` die Adresse des Webservers eingetragen werden. 
 
 
 ## ToDo
 * MQTT für die Kommunikation zwischen openHAB und dem Backend
-* Dummy-Benutzer für die Zutrittssteuerung tatsächlich in die Datenbank eintragen
-* Dummy-Dienstleistung tatsächlich in die Datenbank eintragen
+* Benutzer für die Zutrittssteuerung tatsächlich in die Datenbank eintragen (und mit openHAB koppeln)
+* Buchung der Beispiel-Dienstleistung (Friseur) tatsächlich in die Datenbank eintragen
