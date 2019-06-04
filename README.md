@@ -5,10 +5,52 @@ Unser Ziel ist ein innovatives Baukastensystem, das sämtliche Assistenzsysteme 
 
 ## Architektur
 #### openHAB
-Wir verwenden eine [openHAB](https://www.openhab.org/)-Instanz, mit Hilfe derer die SmartHome-Produkte und Assistenzsysteme verbunden werden. Aktuell für die Entwicklung ist openHAB über die integrierte REST-API erreichbar, diese soll in der Zukunft durch [MQTT](http://mqtt.org/) ersetzt werden. 
+Wir verwenden eine [openHAB](https://www.openhab.org/)-Instanz, mit Hilfe derer die Smart Home-Produkte und Assistenzsysteme verbunden werden. Aktuell für die Entwicklung ist openHAB über die integrierte REST-API erreichbar, diese soll in der Zukunft durch [MQTT](http://mqtt.org/) ersetzt werden. 
 
 #### Datenbank
 Eine [CouchDB-Datenbank](http://couchdb.apache.org/) speichert Informationen über die angelegten Räume und die vorhandenen Produkte inklusive ihrer Zustände. CouchDB wird über eine HTTP-Schnittstelle angesprochen. 
+
+##### Datenbankmodell
+```
+/house
+{
+  "_id": "String",
+  "floor": "Integer",
+  "name": "String"
+}
+
+/doors
+{
+  "_id": "String",
+  "name": "String", 
+  "state": "ON/OFF" // ON = Closed, OFF = open
+}
+
+/heater
+{
+  "_id": "String",
+  "ist": "Float", 
+  "soll": "Float", 
+  "name": "String",
+  "windows" : [
+    {
+      "name": "String", 
+      "state": "OPEN/CLOSED"
+    }
+  ]
+}
+
+/light
+{
+  "_id": "String",
+  "name": "String", 
+  "brightness": "Integer", 
+  "color": "Integer, Integer, Integer",
+  "state": "ON/OFF", 
+  "room": "String"
+}
+
+```
 
 #### Backend
 Das Backend ist ein [Node.JS-Webserver](https://nodejs.org/en/), der als Verbindung zwischen der mobilen Anwendung, openHAB und der Datenbank dient. Es wird eine REST-API angeboten, über die mobile Anwendungen auf die bereitgestellten Daten zugreifen und diese manipulieren können. 
