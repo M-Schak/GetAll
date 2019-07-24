@@ -50,6 +50,26 @@ Eine [CouchDB-Datenbank](http://couchdb.apache.org/) speichert Informationen üb
   "room": "String"
 }
 
+/service
+{
+  "_id": "String",
+  "type": "String",
+  "date": "Date",
+  "time": "Time", 
+  "dur": "Time",
+  "rep": "String",
+  "comment": "String"
+}
+
+/user
+{
+  "_id": "String",
+  "name": "String", 
+  "type": "String",
+  "code": "Integer",
+  "from": "Date", 
+  "to": "Date"
+}
 ```
 
 #### Backend
@@ -67,12 +87,10 @@ npm install
 node server.js
 ```
 
-In der Datei `Backend/api/controllers/House.js` muss dafür die Konstante `host` durch die eigene Adresse zur CouchDB-Instanz ersetzt werden. 
+In den Dateien `Backend/api/controllers/House.js`, `Backend/api/controllers/Service.js` und `Backend/api/controllers/User.js` muss dafür die Konstante `host` durch die eigene Adresse zur CouchDB-Instanz ersetzt werden. 
 
 Die Mobile Anwendung kann entweder im Browser betrachtet/verwendet werden (hierzu die Datei `MobileApp/www/index.html` im Browser aufrufen) oder mit Hilfe von PhoneGap bzw. [PhoneGap Build](https://build.phonegap.com/) in mobile Apps für iOs, Android und Windows Phone überführt werden. In der Datei `MobileApp/www/js/index.js` muss dafür in der Funktion `getBaseAdress()` die Adresse des Webservers eingetragen werden. 
 
 
 ## ToDo
 * MQTT für die Kommunikation zwischen openHAB und dem Backend
-* Benutzer für die Zutrittssteuerung tatsächlich in die Datenbank eintragen (und mit openHAB koppeln)
-* Buchung der Beispiel-Dienstleistung (Friseur) tatsächlich in die Datenbank eintragen

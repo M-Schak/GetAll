@@ -138,6 +138,28 @@ body {
   text-transform: none;
 }
 
+.appts_cell {
+  border: 1px;
+  border-style: solid;
+  border-color: #aaaaaa;
+  border-collapse: collapse;
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.appts {
+  position: relative;
+  left: 50px;
+  top: 50px;
+  width: 75%;
+  text-align: left;
+  color: #aaaaaa;
+  font-size: 20pt;
+  text-transform: none;
+  table-layout: auto;
+}
+
 .floors {
   position: absolute;
   left: 50px;
@@ -419,6 +441,18 @@ input[type=range] {
 #comment {
   margin-left: 130px;
   width: 244px;
+}
+
+#editAppt {
+  color: #aaaaaa;
+  font-size: 20pt;
+  text-transform: none;
+}
+
+.edit_friseur {
+  width: 250px;
+  margin-bottom: 10px;
+  font-size: 18pt;
 }
 
 h1 {

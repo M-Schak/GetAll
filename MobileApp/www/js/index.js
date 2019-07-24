@@ -20,7 +20,7 @@ var app = {
   /* Hilfsfunktion um die Base-Adresse des Backends zu erhalten
    * Entsprechend der eigenen Adresse anpassen! */
   getBaseAdress: function() {
-    return "http://host:8080/";
+    return "http://host:port/";
   },
   /* Navigiere zu Dienstleistungen */
   goToDL: function() {
@@ -58,6 +58,10 @@ var app = {
   goToZutrittNeu: function() {
     window.location.href = "zutritt_neu.html";
   },
+  /* Navigiere zur Zutrittssteuerung, zum Schritt "Benutzer bearbeiten" */
+  goToZutrittEdit: function() {
+    window.location.href = "zutritt_edit.html";
+  },
   /* Navigiere zur Zutrittssteuerung
    * zum Schritt "Neuen Benutzer bestaetigen" */
   goToZutrittConfirm: function() {
@@ -75,11 +79,50 @@ var app = {
       data.code + "&ab=" + data.ab + "&bis=" + data.bis;
     window.location.href = "zutritt_confirm.html" + querystr;
   },
-  /* Navigiere zur Zutrittssteuerung zum Schritt "Bestaetigung" */
+  /* Navigiere zur Zutrittssteuerung zum Schritt "Bestaetigung" und
+   * trage die Daten in der Datenbank ein. */
   goToZutrittBenutzer: function() {
-    /* Leite die Daten an die die naechste Seite weiter. */
-    var querystr = document.getElementById("zutritt").innerHTML;
-    window.location.href = "zutritt_benutzer.html?html=" + querystr;
+    // Hole die uebergebenen Daten
+    var data = {
+      "name": app.getParameterByName("name"),
+      "zugang": app.getParameterByName("zugang"),
+      "code": app.getParameterByName("code"),
+      "ab": app.getParameterByName("ab"),
+      "bis": app.getParameterByName("bis")
+    };
+    if (data.zugang == "PIN") {
+      data.zugang = "PIN";
+    } else if (data.zugang == "a") {
+      data.zugang = "Armband";
+    } else if (data.zugang == "c") {
+      data.zugang = "Karte";
+    } else if (data.zugang == "k") {
+      data.zugang = "Anhänger";
+    }
+    // Formatiere die zwei Datumstrings richtig
+    var ab = data.ab.split("-");
+    data.ab = ab[2] + "." + ab[1] + "." + ab[0];
+    var bis = data.bis.split("-");
+    data.bis = bis[2] + "." + bis[1] + "." + bis[0];
+
+    // Sende eine Anfrage an das Backend, um die Daten in die DB einzutragen
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+        alert(res);
+        /* Leite die Daten an die die naechste Seite weiter. */
+        var querystr = document.getElementById("zutritt").innerHTML;
+        window.location.href = "zutritt_benutzer.html?html=" + querystr;
+      }
+    });
+    var url = app.getBaseAdress() + 'User/new';
+    var params = "name=" + data.name + "&type=" + data.zugang + "&code="
+      + data.code + "&from=" + data.ab + "&to=" + data.bis;
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(params);
   },
   /* Navigiere zur Lichtsteuerung */
   goToLicht: function() {
@@ -104,8 +147,7 @@ var app = {
       "comment": document.getElementById("comment").value
     };
     /* Bilde einen String aus den eingetragenen Daten, um sie zum
-     * naechsten Schritt weiterzuleiten.
-     * TODO: Friseurtermin in Datenbank eintragen */
+     * naechsten Schritt weiterzuleiten. */
     var querystr = "?date=" + data.date + "&time=" + data.time + "&dur=" +
       data.duration + "&rep=" + data.repetition + "&comment=" + data.comment;
     window.location.href = "friseur_confirm.html" + querystr;
@@ -198,7 +240,360 @@ var app = {
   /* Navigiere zur Anzeige des gebuchten Friseurtermins */
   goToFriseurTermin: function() {
     var querystr = document.getElementById("friseur").innerHTML;
-    window.location.href = "friseur_termin.html?html=" + querystr;
+
+    // Hole die uebergebenen Daten
+    var data = {
+      "type": "Friseur",
+      "date": app.getParameterByName("date"),
+      "time": app.getParameterByName("time"),
+      "dur": app.getParameterByName("dur"),
+      "rep": app.getParameterByName("rep"),
+      "comment": app.getParameterByName("comment")
+    };
+    if (data.rep == "w") {
+      data.rep = "Wöchentlich";
+    } else if (data.rep == "2w") {
+      data.rep = "Zweiwöchentlich";
+    } else if (data.rep == "m") {
+      data.rep = "Monatlich";
+    } else if (data.rep == "t") {
+      data.rep = "Täglich";
+    } else if (data.rep == "2t") {
+      data.rep = "Alle 2 Tage";
+    } else if (data.rep == "vj") {
+      data.rep = "Vierteljährlich";
+    } else if (data.rep == "hj") {
+      data.rep = "Halbjährlich";
+    } else if (data.rep == "j") {
+      data.rep = "Jährlich";
+    } else {
+      data.rep = "Siehe Kommentar";
+    }
+    // Formatieren den Datumsstring richtig
+    var date = data.date.split("-");
+    data.date = date[2] + "." + date[1] + "." + date[0];
+
+    /* sende eine Anfrage an das Backend, den Friseurtermin zu buchen  */
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+        window.location.href = "friseur_termin.html?html=" + querystr;
+      }
+    });
+    var url = app.getBaseAdress() + 'Service/new';
+    var params = "type=" + data.type + "&date=" + data.date + "&time="
+      + data.time + "&dur=" + data.dur + "&rep=" + data.rep + "&comment="
+      + data.comment;
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(params);
+  },
+  /* Navigiere zur Seite zum Bearbeiten von gebuchten Friseurterminen */
+  goToFriseurEdit: function() {
+    window.location.href = "friseur_edit.html";
+  },
+  /* Zeige alle gebuchten Friseurtermine auf einer Seite an, inklusive
+   * einer Funktionalitaet zum Bearbeiten */
+  friseurShowAll: function() {
+    /* sende eine Anfrage an das Backend, um alle gebuchten
+     * Termine anzuzeigen */
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+
+        var html = "<table class='appts_cell'><tr><th class='appts_cell'>" +
+          "Aktion</th><th class='appts_cell'>Datum</th><th class='appts_cell'>" +
+          "Uhrzeit</th><th class='appts_cell'>Dauer</th><th class='appts_cell'>" +
+          "Wiederholung</th><th class='appts_cell'>Kommentar</th>";
+        res.forEach(appt => {
+          html += "<tr>";
+          html += "<td class='appts_cell'><a onclick='app.editAppt(\"" +
+            appt.id + "\")'>Ändern</a></td>";
+          html += "<td class='appts_cell'>" + appt.date + "</td>";
+          html += "<td class='appts_cell'>" + appt.time + " Uhr</td>";
+          html += "<td class='appts_cell'>" + appt.dur + "h</td>";
+          html += "<td class='appts_cell'>" + appt.rep + "</td>";
+          html += "<td class='appts_cell'>" + appt.comment + "</td>";
+          html += "</tr>";
+        });
+        html += "</table>";
+        document.getElementById("appts").innerHTML = html;
+      }
+    });
+    var url = app.getBaseAdress() + 'Service';
+    xhr.open("GET", url);
+    xhr.send();
+  },
+  /* Zeige alle gespeicherten Benutzer auf einer Seite an, inklusive
+   * einer Funktionalitaet zum Bearbeiten */
+  zutrittShowAll: function() {
+    /* sende eine Anfrage an das Backend, um alle gespeicherten
+     * Benutzer anzuzeigen */
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+
+        var html = "<table class='appts_cell'><tr><th class='appts_cell'>" +
+          "Aktion</th><th class='appts_cell'>Name</th><th class='appts_cell'>" +
+          "Zugang</th><th class='appts_cell'>Code</th><th class='appts_cell'>" +
+          "Von</th><th class='appts_cell'>Bis</th>";
+        res.forEach(user => {
+          html += "<tr>";
+          html += "<td class='appts_cell'><a onclick='app.editUser(\"" +
+            user.id + "\")'>Ändern</a> - ";
+          html += "<a onclick='app.deleteUser(\"" + user.id + "\", \"" +
+            user.name + "\")'>Löschen</a></td>";
+          html += "<td class='appts_cell'>" + user.name + "</td>";
+          html += "<td class='appts_cell'>" + user.type + "</td>";
+          html += "<td class='appts_cell'>" + user.code + "</td>";
+          html += "<td class='appts_cell'>" + user.from + "</td>";
+          html += "<td class='appts_cell'>" + user.to + "</td>";
+          html += "</tr>";
+        });
+        html += "</table>";
+        document.getElementById("users").innerHTML = html;
+      }
+    });
+    var url = app.getBaseAdress() + 'User';
+    xhr.open("GET", url);
+    xhr.send();
+  },
+  /* Zeige ein Formular mit den gespeicherten Termindaten auf der Seite an,
+   * damit diese geaendert werden koennen */
+  editAppt: function(id) {
+    /* sende eine Anfrage an das Backend, um den entsprechenden Termin
+     * anzuzeigen */
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+        var html = "<form onsubmit='app.friseurEdit(); return false'><table>";
+
+        // Das Datum muss von dd.mm.yyyy konvertiert werden zu yyyy-mm-dd
+        var date = res.date.split(".");
+        res.date = date[2] + "-" + date[1] + "-" + date[0];
+        html += "<tr><td>Datum:</td><td><input type='date' name='date' id='date_f' class='edit_friseur' value='" + res.date + "'></td></tr>";
+        html += "<tr><td>Uhrzeit:</td><td><input type='time' name='time' id='time_f' class='edit_friseur' value='" + res.time + "'></td></tr>";
+        html += "<tr><td>Dauer:</td><td><input type='time' name='dur' id='dur' class='edit_friseur' value='" + res.dur + "'></td></tr>";
+        html += "<tr><td>Wiederholung:</td><td><select name='rep' id='rep' class='edit_friseur'>";
+        html += "<option selected value='" + res.rep + "'>" + res.rep + "</option>";
+        html += "<option value='Wöchentlich'>Wöchentlich</option>";
+        html += "<option value='Zwei-Wöchentlich'>Zwei-Wöchentlich</option>";
+        html += "<option value='Monatlich'>Monatlich</option>";
+        html += "<option value='Täglich'>Täglich</option>";
+        html += "<option value='Alle 2 Tage'>Alle 2 Tage</option>";
+        html += "<option value='Vierteljährlich'>Vierteljährlich</option>";
+        html += "<option value='Halbjährlich'>Halbjährlich</option>";
+        html += "<option value='Jährlich'>Jährlich</option>";
+        html += "<option value='Sonstiges'>Sonstiges (als Kommentar eintragen)</option>";
+        html += "</select></td></tr>";
+        html += "<tr><td>Kommentar:</td><td><input type='text' name='comment' id='comment_f' class='edit_friseur' value='"
+          + res.comment + "'></td></tr>";
+        html += "<tr><td></td><td><a id='editAppt' onclick='app.friseurEdit(\"" + id + "\")'>Speichern</a></td></tr></table>";
+        html += "</form>";
+        document.getElementById("editAppt").innerHTML = html;
+      }
+    });
+    var url = app.getBaseAdress() + 'Service/' + id;
+    xhr.open("GET", url);
+    xhr.send();
+  },
+  /* Zeige ein Formular mit den gespeicherten Benutzerdaten auf der Seite an,
+   * damit diese geaendert werden koennen  */
+  editUser: function(id) {
+    /* sende eine Anfrage an das Backend, um den entsprechenden Benutzer
+     * anzuzeigen */
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+        var html = "<form onsubmit='app.userEdit(\"" + id + "\"); return false'><table>";
+
+        // Die Daten müssen von dd.mm.yyyy konvertiert werden zu yyyy-mm-dd
+        var date = res.from.split(".");
+        res.from = date[2] + "-" + date[1] + "-" + date[0];
+        date = res.to.split(".");
+        res.to = date[2] + "-" + date[1] + "-" + date[0];
+        html += "<tr><td>Name:</td><td><input type='text' name='name' id='name_u' class='edit_friseur' value='" + res.name + "'></td></tr>";
+        html += "<tr><td>Zugang:</td><td><select name='zugang' id='zugang_u' class='edit_friseur'>";
+        html += "<option selected value='" + res.type + "'>" + res.type + "</option>";
+        html += "<option value='PIN'>PIN</option>";
+        html += "<option value='Armband'>Armband</option>";
+        html += "<option value='Karte'>Karte</option>";
+        html += "<option value='Anhänger'>Anhänger</option>";
+        html += "<tr><td>Code:</td><td><input type='text' name='code' id='code_u' class='edit_friseur' value='" + res.code + "'></td></tr>";
+        html += "<tr><td>Von:</td><td><input type='date' name='ab' id='ab_u' class='edit_friseur' value='" + res.from + "'></td></tr>";
+        html += "<tr><td>Bis:</td><td><input type='date' name='bis' id='bis_u' class='edit_friseur' value='"
+          + res.to + "'></td></tr>";
+        html += "<tr><td></td><td><a id='editUser' onclick='app.userEdit(\"" + id + "\")'>Speichern</a></td></tr></table>";
+        html += "</form>";
+        document.getElementById("editAppt").innerHTML = html;
+      }
+    });
+    var url = app.getBaseAdress() + 'User/' + id;
+    xhr.open("GET", url);
+    xhr.send();
+  },
+  /* Aendere den gespeicherten Friseurtermin */
+  friseurEdit: function(id) {
+    // Verarbeite die Daten aus dem Formular
+    var data = {
+      "id": id,
+      "type": "Friseur",
+      "date": document.getElementById("date_f").value,
+      "time": document.getElementById("time_f").value,
+      "dur": document.getElementById("dur").value,
+      "rep": document.getElementById("rep").value,
+      "comment": document.getElementById("comment_f").value,
+    };
+
+    // Das Datum muss von yyyy-mm-dd konvertiert werden zu dd.mm.yyyy
+    var date = data.date.split("-");
+    data.date = date[2] + "." + date[1] + "." + date[0];
+
+    // Sende eine Nachricht an das Backend, um den Termin zu ändern
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+        // Lade die Übersicht neu, um den aktualisierten Termin anzuzeigen
+        location.reload();
+      }
+    });
+    var url = app.getBaseAdress() + 'Service/edit';
+    var params = "id=" + data.id + "&type=" + data.type + "&date=" + data.date
+      + "&time=" + data.time + "&dur=" + data.dur + "&rep=" + data.rep
+      + "&comment=" + data.comment;
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(params);
+  },
+  /* Aendere die gespeicherten Benutzerdaten */
+  userEdit: function(id) {
+    // Verarbeite die Daten aus dem Formular
+    var data = {
+      "id": id,
+      "name": document.getElementById("name_u").value,
+      "type": document.getElementById("zugang_u").value,
+      "code": document.getElementById("code_u").value,
+      "from": document.getElementById("ab_u").value,
+      "to": document.getElementById("bis_u").value,
+    };
+
+    // Die Daten müssen von yyyy-mm-dd konvertiert werden zu dd.mm.yyyy
+    var date = data.from.split("-");
+    data.from = date[2] + "." + date[1] + "." + date[0];
+    var date = data.to.split("-");
+    data.to = date[2] + "." + date[1] + "." + date[0];
+
+    // Sende eine Nachricht an das Backend, um den Termin zu ändern
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+        // Lade die Übersicht neu, um den aktualisierten Termin anzuzeigen
+        location.reload();
+      }
+    });
+    var url = app.getBaseAdress() + 'User/edit';
+    var params = "id=" + data.id + "&name=" + data.name + "&type=" + data.type
+      + "&code=" + data.code + "&from=" + data.from + "&to=" + data.to;
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(params);
+  },
+  /* Navigiere zur Seite, auf der gespeicherte Friseurtermine storniert
+   * werden koennen */
+  goToFriseurCancel: function() {
+    window.location.href = "friseur_cancel.html";
+  },
+  /* Zeige eine Liste aller Friseurtermine auf der Seite an, inklusive
+   * einer Funktionalitaet um die Termine zu stornieren */
+  friseurShowAllCancel: function() {
+    /* sende eine Anfrage an das Backend, um alle gebuchten
+     * Termine anzuzeigen */
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState == 4) {
+        var res = JSON.parse(this.responseText);
+
+        var html = "<table class='appts_cell'><tr><th class='appts_cell'>" +
+          "Aktion</th><th class='appts_cell'>Datum</th><th class='appts_cell'>" +
+          "Uhrzeit</th><th class='appts_cell'>Dauer</th><th class='appts_cell'>" +
+          "Wiederholung</th><th class='appts_cell'>Kommentar</th>";
+        res.forEach(appt => {
+          html += "<tr>";
+          html += "<td class='appts_cell'><a onclick='app.cancelAppt(\""
+            + appt.id + "\", \"" + appt.date + "\", \"" + appt.time + "\")'>Stornieren</a></td>";
+          html += "<td class='appts_cell'>" + appt.date + "</td>";
+          html += "<td class='appts_cell'>" + appt.time + " Uhr</td>";
+          html += "<td class='appts_cell'>" + appt.dur + "h</td>";
+          html += "<td class='appts_cell'>" + appt.rep + "</td>";
+          html += "<td class='appts_cell'>" + appt.comment + "</td>";
+          html += "</tr>";
+        });
+        html += "</table>";
+        document.getElementById("appts").innerHTML = html;
+      }
+    });
+    var url = app.getBaseAdress() + 'Service';
+    xhr.open("GET", url);
+    xhr.send();
+  },
+  /* Loesche den ausgewaehlten Termin nach bestaetigter Nachfrage */
+  cancelAppt: function(id, date, time) {
+    if (confirm("Sind Sie sich sicher, dass Sie den Friseurtermin\nam " +
+      date + " um " + time + " Uhr\nmit der ID " + id
+      + "\nwirklich stornieren wollen?")) {
+        // Termin wird geloescht
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+          if (this.readyState == 4) {
+            var res = JSON.parse(this.responseText);
+            alert(res);
+            location.reload();
+          }
+        });
+        var url = app.getBaseAdress() + 'Service/cancel/' + id;
+        xhr.open("GET", url);
+        xhr.send();
+      } else {
+        // Nichts passiert..
+      }
+
+  },
+  /* Loesche den ausgewaehlten Benutzer nach bestaetigter Nachfrage */
+  deleteUser: function(id, name) {
+    if (confirm("Sind Sie sich sicher, dass sie den Benutzer\n" +
+      name + " mit der ID " + id + " wirklich löschen wollen?")) {
+        // Termin wird geloescht
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+          if (this.readyState == 4) {
+            var res = JSON.parse(this.responseText);
+            alert(res);
+            location.reload();
+          }
+        });
+        var url = app.getBaseAdress() + 'User/delete/' + id;
+        xhr.open("GET", url);
+        xhr.send();
+    } else {
+      // Nichts passiert..
+    }
   },
   /* Gehe zur Lichtsteuerung des ausgewaehlten Raumes */
   goToLichtWozi: function() {

@@ -1,8 +1,8 @@
 'use strict';
 
 const request = require('request-promise');
-// Host adress of the CouchDB instance, change username and password
-const host = "http://user:password@127.0.0.1:5984";
+// Host adress of the CouchDB instance
+const host = "http://user:password@host:port";
 
 
 /*
@@ -14,7 +14,7 @@ exports.number_of_floors = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/house/_find',
+    url: host + '/house/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -102,7 +102,7 @@ exports.list_floor = function(req, res) {
   console.log(floor)
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/house/_find',
+    url: host + '/house/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -146,7 +146,7 @@ exports.list_all_doors = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/doors/_find',
+    url: host + '/doors/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -188,7 +188,7 @@ exports.show_door = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/doors/_find',
+    url: host + '/doors/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -232,7 +232,7 @@ exports.update_door = function(req, res) {
   // Step 1: Get current rev from database
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/doors/_find',
+    url: host + '/doors/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -253,7 +253,7 @@ exports.update_door = function(req, res) {
       // Step 2: Update in database
       const options = {
         method: 'PUT',
-        url: 'http://127.0.0.1:5984/doors/' + list[0]['_id'],
+        url: host + '/doors/' + list[0]['_id'],
         headers: {
          'Content-Type': 'application/json'
         },
@@ -304,7 +304,7 @@ exports.list_all_heater = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/heater/_find',
+    url: host + '/heater/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -347,7 +347,7 @@ exports.show_heater = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/heater/_find',
+    url: host + '/heater/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -392,7 +392,7 @@ exports.update_heater = function(req, res) {
   // Step 1: Get current rev and data of room in database
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/heater/_find',
+    url: host + '/heater/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -415,7 +415,7 @@ exports.update_heater = function(req, res) {
       // Step 2: Update desired temperature in database
       const options = {
         method: 'PUT',
-        url: 'http://127.0.0.1:5984/heater/' + id,
+        url: host + '/heater/' + id,
         headers: {
          'Content-Type': 'application/json'
         },
@@ -469,7 +469,7 @@ exports.list_all_lights = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/light/_find',
+    url: host + '/light/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -516,7 +516,7 @@ exports.show_lights = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/light/_find',
+    url: host + '/light/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -562,7 +562,7 @@ exports.show_one_light = function(req, res) {
 
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/light/_find',
+    url: host + '/light/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -609,7 +609,7 @@ exports.update_light = function(req, res) {
   // Step 1: Get current rev of light from database
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/light/_find',
+    url: host + '/light/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -631,7 +631,7 @@ exports.update_light = function(req, res) {
       // Step 2: Update state of light in database
       const options = {
         method: 'PUT',
-        url: 'http://127.0.0.1:5984/light/' + light_data._id,
+        url: host + '/light/' + light_data._id,
         headers: {
          'Content-Type': 'application/json'
         },
@@ -691,7 +691,7 @@ exports.update_light_color = function(req, res) {
   // Step 1: Get current rev of light from database
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/light/_find',
+    url: host + '/light/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -713,7 +713,7 @@ exports.update_light_color = function(req, res) {
       // Step 2: Update state of light in database
       const options = {
         method: 'PUT',
-        url: 'http://127.0.0.1:5984/light/' + light_data._id,
+        url: host + '/light/' + light_data._id,
         headers: {
          'Content-Type': 'application/json'
         },
@@ -774,7 +774,7 @@ exports.update_light_brightness = function(req, res) {
   // Step 1: Get current rev of light from database
   const options = {
     method: 'POST',
-    url: 'http://127.0.0.1:5984/light/_find',
+    url: host + '/light/_find',
     headers: {
      'Content-Type': 'application/json'
     },
@@ -796,7 +796,7 @@ exports.update_light_brightness = function(req, res) {
       // Step 2: Update state of light in database
       const options = {
         method: 'PUT',
-        url: 'http://127.0.0.1:5984/light/' + light_name,
+        url: host + '/light/' + light_name,
         headers: {
          'Content-Type': 'application/json'
         },

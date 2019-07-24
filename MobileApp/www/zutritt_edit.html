@@ -11,11 +11,8 @@
 </head>
 
 <body>
-  <div class='buttons'>
-    <a onclick="app.goToZutrittNeu()">Benutzer neu anlegen</a><br>
-    <a onclick='app.goToZutrittEdit()'>Benutzer bearbeiten</a><br>
-  </div>
-  <div class='doors' id='door_list'>
+  <div class='editAppt' id='editAppt'></div>
+  <div class='appts' id='users'>
     Loading...
   </div>
   <div class='back'>
@@ -24,7 +21,7 @@
   <script type="text/javascript" src="cordova.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
   <script type="text/javascript">
-    app.loadDoors();
+    app.zutrittShowAll();
   </script>
 </body>
 
